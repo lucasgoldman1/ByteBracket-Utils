@@ -1,2 +1,2 @@
-# ByteBracket-Lamdas
-AWS Lambda functions for ByteBracket.io, a better way to bracket.
+# ByteBracket-Utils
+AWS Lambda functions and other utilities for ByteBracket.io, a better way to bracket.
