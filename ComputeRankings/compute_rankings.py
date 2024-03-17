@@ -11,16 +11,16 @@ def compute_rankings(event, context):
     
     rank = pd.Series()
     
-    rank["W-L%"] = event["WL%"]
-    rank["SOS"] = event["SOS"]
-    rank["pf"] = event["PPG"]
-    rank["pa"] = event["OPPG"]
-    rank['KenPom'] = event["kenpom"]
-    rank['3P%'] = event["3PM"]
-    rank['FT%'] = event["FTM"]
-    rank['TOV'] = event["TO"]
-    rank['Takeaways'] = event["STL/BLK"]
-    rank['Quad1'] = event["Quad1"]
+    rank["win_loss_pct"] = event["WL%"]
+    rank["sos"] = event["SOS"]
+    rank["pts"] = event["PPG"]
+    rank["opp_pts"] = event["OPPG"]
+    rank['trb'] = event["kenpom"]
+    rank['fg3_pct'] = event["3PM"]
+    rank['ft_pct'] = event["FTM"]
+    rank['tov'] = event["TO"]
+    rank['takeaways'] = event["STL/BLK"]
+    rank['ast'] = event["Quad1"]
 
 
     sum = rank.sum() 
@@ -48,10 +48,10 @@ def compute_rankings(event, context):
 def get_teams_df():
     teams_df = pd.read_csv('ncaa.csv', index_col=0)
     teams_df.sort_values(by=['School'], inplace=True, ascending=True)
-    Ws =  teams_df['W']
-    Ls =  teams_df['L']
-    teams_df['Takeaways'] = teams_df['STL'] + teams_df['BLK']
-    teams_df.drop(['STL', 'x', 'y', 'z', 'h', 'l', 'BLK', 'W', 'L'], axis=1, inplace= True)
+    Ws =  teams_df['wins']
+    Ls =  teams_df['losses']
+    teams_df['takeaways'] = teams_df['stl'] + teams_df['blk']
+    teams_df.drop(['stl', 'x', 'y', 'z', 'h', 'l', 'blk', 'W', 'L'], axis=1, inplace= True)
     # Normalize data
     for (columnName, columnData) in teams_df.iteritems(): 
         if columnName != 'School':
@@ -59,5 +59,5 @@ def get_teams_df():
             teams_df[columnName] = stats.zscore(columnData)
     
     # Invert stats that negatively affect a team
-    teams_df[['pa', 'TOV']] *= -1
+    teams_df[['opp_pts', 'tov']] *= -1
     return teams_df, Ws, Ls
