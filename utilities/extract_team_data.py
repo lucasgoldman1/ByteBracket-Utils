@@ -23,9 +23,10 @@ def extract_team_data():
             team[val.attrs['data-stat']] = val.text
         if team:
             teams.append(team)
-
     teams_df = pd.DataFrame(teams)
-    teams_df.set_index('school_name', inplace=True)
+    cols = ['pts', 'opp_pts', 'trb', 'ast', 'stl', 'blk', 'tov', 'pf']
+    for col in cols:
+        teams_df[col] = teams_df[col].astype(int) / teams_df['g'].astype(int)
     teams_df.drop(['g', 'srs', 'wins_conf', 'losses_conf', 'wins_home', 'losses_home', 'wins_visitor', 'losses_visitor', 'mp', 'fg', 'fga', 'fg_pct', 'fg3', 'fg3a', 'fta', 'ft', 'orb', 'pf'], axis=1, inplace=True)
     return teams_df
 
